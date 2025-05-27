@@ -4,8 +4,8 @@ import os
 import json
 import jwt
 from functools import wraps
-from Cryptodome.Cipher import AES
-from Cryptodome.Util.Padding import unpad
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
 import base64
 import hashlib
 
