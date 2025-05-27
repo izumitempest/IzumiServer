@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template
 from datetime import datetime
 import os
 import json
@@ -49,7 +49,7 @@ def require_token(f):
 
 @app.route('/')
 def index():
-    return 'Izumi.exe is online...'
+    return render_template('index.html')
 
 @app.route('/dump', methods=['POST', 'PUT'])
 @require_token
