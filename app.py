@@ -4,9 +4,29 @@ import os
 import json
 import jwt
 from functools import wraps
+from Cryptodome.Cipher import AES
+from Cryptodome.Util.Padding import unpad
+import base64
+import hashlib
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'FromThe104WeSurveyTheOtherSideOfTheSea')
+AES_SECRET = os.getenv("AES_SECRET", "FromThe104")
 
+def get_aes_key():
+    return hashlib.sha256(AES_SECRET.encode()).digest()
+
+def decrypt_aes(encrypted_data_b64):
+    try:
+        raw_data = base64.b64decode(encrypted_data_b64)
+        iv = raw_data[:16]
+        ciphertext = raw_data[16:]
+        cipher = AES.new(get_aes_key(), AES.MODE_CBC, iv)
+        plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
+        return json.loads(plaintext.decode())
+    except Exception as e:
+        print(f"[DECRYPTION ERROR] {e}")
+        return None
+    
 app = Flask(__name__)
 DUMP_DIR  = 'dumps'
 os.makedirs(DUMP_DIR, exist_ok=True)
@@ -31,12 +51,18 @@ def index():
 @app.route('/dump', methods=['POST', 'PUT'])
 @require_token
 def dump_data():
-    data = request.get_json(force=True)
-    timestamp = datetime.utcnow().strftime('%Y-%m-%d|%H-%M-%S')
+
+    encrypted_data = request.get_data(as_text=True)
+    decrypted = decrypt_aes(encrypted_data)
+
+    if not decrypted:
+        return jsonify({'error': 'Decryption failed'}), 400
+
+    timestamp = datetime.utcnow().strftime('%Y-%m-%dT%H-%M-%S')
     filename = f'dump-{timestamp}.json'
     filepath = os.path.join(DUMP_DIR, filename)
     with open(filepath, 'w') as f:
-        json.dump(data, f, indent=2)
+        json.dump(decrypted, f, indent=2)
     return jsonify({'status': 'ok', 'file': filename})
 
 @app.route('/dumps', methods=['GET'])
