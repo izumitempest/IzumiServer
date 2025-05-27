@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Control</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#00F0FF',secondary:'#FF0033'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0A0A;
+            color: #E0E0E0;
+        }
+        .terminal {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .pulsing {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        .glow {
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
+        }
+        .glow-red {
+            box-shadow: 0 0 8px rgba(255, 0, 51, 0.7);
+        }
+        .scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scrollbar::-webkit-scrollbar-track {
+            background: #1A1A1A;
+        }
+        .scrollbar::-webkit-scrollbar-thumb {
+            background: #00F0FF;
+            border-radius: 8px;
+        }
+        .grid-cols-agents {
+            grid-template-columns: 0.8fr 0.5fr 1fr 1fr 1fr;
+        }
+    </style>
+</head>
+<body class="h-[762px] w-[375px] overflow-hidden">
+    <!-- Nav Bar -->
+    <nav class="fixed w-full top-0 z-50 bg-[#0A0A0A] border-b border-[#1A1A1A] px-4 py-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="font-['Pacifico'] text-primary text-xl">logo</span>
+                <div class="flex items-center space-x-1">
+                    <div class="w-2 h-2 rounded-full bg-primary pulsing"></div>
+                    <span class="text-xs text-primary">ONLINE</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <div class="text-xs">
+                    <div class="text-[#888] mb-0.5">UPTIME</div>
+                    <div class="text-primary font-medium" id="uptime">23:45:12</div>
+                </div>
+                <div class="text-xs">
+                    <div class="text-[#888] mb-0.5">DATE</div>
+                    <div class="text-primary font-medium" id="current-date">2025-05-27</div>
+                </div>
+                <div class="w-8 h-8 flex items-center justify-center bg-[#1A1A1A] rounded-full cursor-pointer">
+                    <i class="ri-settings-3-line text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <main class="pt-16 pb-16 px-4">
+        <!-- Status Indicators -->
+        <div class="grid grid-cols-4 gap-2 mb-4">
+            <div class="bg-[#1A1A1A] rounded p-2 text-center">
+                <div class="text-[10px] text-[#888] mb-1">NETWORK</div>
+                <div class="flex items-center justify-center">
+                    <i class="ri-wifi-line text-primary mr-1"></i>
+                    <span class="text-xs">SECURE</span>
+                </div>
+            </div>
+            <div class="bg-[#1A1A1A] rounded p-2 text-center">
+                <div class="text-[10px] text-[#888] mb-1">AGENTS</div>
+                <div class="flex items-center justify-center">
+                    <i class="ri-user-line text-primary mr-1"></i>
+                    <span class="text-xs">12 ACTIVE</span>
+                </div>
+            </div>
+            <div class="bg-[#1A1A1A] rounded p-2 text-center">
+                <div class="text-[10px] text-[#888] mb-1">TRAFFIC</div>
+                <div class="flex items-center justify-center">
+                    <i class="ri-bar-chart-line text-primary mr-1"></i>
+                    <span class="text-xs">1.2 GB</span>
+                </div>
+            </div>
+            <div class="bg-[#1A1A1A] rounded p-2 text-center">
+                <div class="text-[10px] text-[#888] mb-1">SECURITY</div>
+                <div class="flex items-center justify-center">
+                    <i class="ri-shield-check-line text-primary mr-1"></i>
+                    <span class="text-xs">LEVEL 3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Traffic Visualization -->
+        <div class="bg-[#1A1A1A] rounded mb-4 p-3">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-sm font-medium">Network Traffic</h3>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs text-[#888]">Live</span>
+                    <div class="w-2 h-2 rounded-full bg-primary pulsing"></div>
+                </div>
+            </div>
+            <div id="traffic-chart" class="h-[80px] w-full"></div>
+        </div>
+
+        <!-- Command Terminal -->
+        <div class="bg-[#1A1A1A] rounded mb-4 p-3">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-sm font-medium">Command Terminal</h3>
+                <div class="flex space-x-1">
+                    <div class="w-2 h-2 rounded-full bg-[#FF0033]"></div>
+                    <div class="w-2 h-2 rounded-full bg-[#FFCC00]"></div>
+                    <div class="w-2 h-2 rounded-full bg-primary"></div>
+                </div>
+            </div>
+            <div class="terminal bg-[#0A0A0A] text-[#E0E0E0] p-2 rounded h-[80px] text-xs overflow-y-auto scrollbar mb-2">
+                <div class="text-[#888]">root@nexus:~# <span class="text-primary">list_agents</span></div>
+                <div>Scanning network for active agents...</div>
+                <div>Found 12 active connections.</div>
+                <div class="text-[#888]">root@nexus:~# <span class="text-primary">check_security</span></div>
+                <div>Security protocols active. Encryption: AES-256.</div>
+                <div class="text-[#888]">root@nexus:~# <span id="command-cursor">_</span></div>
+            </div>
+            <div class="flex">
+                <input type="text" class="terminal bg-[#0A0A0A] text-xs text-[#E0E0E0] border-none outline-none flex-1 p-2 rounded-l !rounded-button" placeholder="Enter command...">
+                <button class="bg-primary text-[#0A0A0A] text-xs font-medium px-3 !rounded-button">EXECUTE</button>
+            </div>
+        </div>
+
+        <!-- Connected Agents -->
+        <div class="bg-[#1A1A1A] rounded mb-4 p-3">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-sm font-medium">Connected Agents</h3>
+                <span class="text-xs text-primary">12 Active</span>
+            </div>
+            <div class="overflow-x-auto">
+                <div class="grid grid-cols-agents gap-2 text-xs text-[#888] mb-1 px-2">
+                    <div>AGENT ID</div>
+                    <div>STATUS</div>
+                    <div>LAST CHECK-IN</div>
+                    <div>LOCATION</div>
+                    <div>SYSTEM</div>
+                </div>
+                <div class="h-[120px] overflow-y-auto scrollbar">
+                    <div class="grid grid-cols-agents gap-2 text-xs border-b border-[#2A2A2A] p-2 hover:bg-[#222] cursor-pointer">
+                        <div class="text-primary">AGT_45X12</div>
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 rounded-full bg-primary mr-1"></div>
+                            <span>Active</span>
+                        </div>
+                        <div>2 min ago</div>
+                        <div>Tokyo, JP</div>
+                        <div>Linux 5.15.0</div>
+                    </div>
+                    <div class="grid grid-cols-agents gap-2 text-xs border-b border-[#2A2A2A] p-2 hover:bg-[#222] cursor-pointer">
+                        <div class="text-primary">AGT_78B33</div>
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 rounded-full bg-primary mr-1"></div>
+                            <span>Active</span>
+                        </div>
+                        <div>5 min ago</div>
+                        <div>Berlin, DE</div>
+                        <div>Windows 11</div>
+                    </div>
+                    <div class="grid grid-cols-agents gap-2 text-xs border-b border-[#2A2A2A] p-2 hover:bg-[#222] cursor-pointer">
+                        <div class="text-primary">AGT_32F09</div>
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 rounded-full bg-primary mr-1"></div>
+                            <span>Active</span>
+                        </div>
+                        <div>7 min ago</div>
+                        <div>New York, US</div>
+                        <div>macOS 14.5</div>
+                    </div>
+                    <div class="grid grid-cols-agents gap-2 text-xs border-b border-[#2A2A2A] p-2 hover:bg-[#222] cursor-pointer">
+                        <div class="text-primary">AGT_91C45</div>
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 rounded-full bg-secondary mr-1"></div>
+                            <span class="text-secondary">Idle</span>
+                        </div>
+                        <div>15 min ago</div>
+                        <div>London, UK</div>
+                        <div>Linux 6.0.2</div>
+                    </div>
+                    <div class="grid grid-cols-agents gap-2 text-xs border-b border-[#2A2A2A] p-2 hover:bg-[#222] cursor-pointer">
+                        <div class="text-primary">AGT_67D21</div>
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 rounded-full bg-primary mr-1"></div>
+                            <span>Active</span>
+                        </div>
+                        <div>3 min ago</div>
+                        <div>Sydney, AU</div>
+                        <div>Windows 10</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Data Exfiltration Map -->
+        <div class="bg-[#1A1A1A] rounded mb-4 p-3">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-sm font-medium">Global Operations</h3>
+                <div class="flex items-center space-x-2 text-xs">
+                    <i class="ri-earth-line text-primary"></i>
+                    <span>Live View</span>
+                </div>
+            </div>
+            <div class="h-[120px] w-full rounded overflow-hidden relative">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://public.readdy.ai/gen_page/map_placeholder_1280x720.png');">
+                    <div class="absolute h-3 w-3 rounded-full bg-primary glow" style="top: 35%; left: 80%"></div>
+                    <div class="absolute h-3 w-3 rounded-full bg-primary glow" style="top: 40%; left: 15%"></div>
+                    <div class="absolute h-3 w-3 rounded-full bg-primary glow" style="top: 30%; left: 48%"></div>
+                    <div class="absolute h-3 w-3 rounded-full bg-secondary glow-red" style="top: 65%; left: 65%"></div>
+                    <div class="absolute h-3 w-3 rounded-full bg-primary glow" style="top: 75%; left: 20%"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Tab Bar -->
+    <div class="fixed bottom-0 w-full bg-[#0A0A0A] border-t border-[#1A1A1A] px-2 py-2">
+        <div class="grid grid-cols-5 gap-1">
+            <div class="flex flex-col items-center justify-center cursor-pointer">
+                <div class="w-6 h-6 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-1">
+                    <i class="ri-dashboard-line text-primary"></i>
+                </div>
+                <span class="text-[10px] text-primary">Dashboard</span>
+            </div>
+            <div class="flex flex-col items-center justify-center cursor-pointer">
+                <div class="w-6 h-6 flex items-center justify-center rounded-full mb-1">
+                    <i class="ri-user-line text-[#888]"></i>
+                </div>
+                <span class="text-[10px] text-[#888]">Agents</span>
+            </div>
+            <div class="flex flex-col items-center justify-center cursor-pointer">
+                <div class="w-10 h-10 flex items-center justify-center bg-primary rounded-full -mt-5 mb-1 shadow-lg">
+                    <i class="ri-terminal-box-fill text-[#0A0A0A] text-xl"></i>
+                </div>
+                <span class="text-[10px] text-[#888]">Command</span>
+            </div>
+            <div class="flex flex-col items-center justify-center cursor-pointer">
+                <div class="w-6 h-6 flex items-center justify-center rounded-full mb-1">
+                    <i class="ri-database-2-line text-[#888]"></i>
+                </div>
+                <span class="text-[10px] text-[#888]">Data</span>
+            </div>
+            <div class="flex flex-col items-center justify-center cursor-pointer">
+                <div class="w-6 h-6 flex items-center justify-center rounded-full mb-1">
+                    <i class="ri-shield-line text-[#888]"></i>
+                </div>
+                <span class="text-[10px] text-[#888]">Security</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Action Button -->
+    <div class="fixed bottom-20 right-4 z-50">
+        <div class="w-12 h-12 flex items-center justify-center bg-secondary rounded-full shadow-lg cursor-pointer">
+            <i class="ri-alarm-warning-fill text-white text-xl"></i>
+        </div>
+    </div>
+
+    <script id="date-time-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const uptimeElement = document.getElementById('uptime');
+            const dateElement = document.getElementById('current-date');
+            
+            // Set current date
+            dateElement.textContent = '2025-05-27';
+            
+            // Update uptime counter
+            let seconds = 45;
+            let minutes = 45;
+            let hours = 23;
+            
+            setInterval(() => {
+                seconds++;
+                if (seconds >= 60) {
+                    seconds = 0;
+                    minutes++;
+                    if (minutes >= 60) {
+                        minutes = 0;
+                        hours++;
+                    }
+                }
+                
+                const formattedHours = hours.toString().padStart(2, '0');
+                const formattedMinutes = minutes.toString().padStart(2, '0');
+                const formattedSeconds = seconds.toString().padStart(2, '0');
+                
+                uptimeElement.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+            }, 1000);
+        });
+    </script>
+
+    <script id="command-cursor-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const cursor = document.getElementById('command-cursor');
+            
+            setInterval(() => {
+                cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
+            }, 500);
+        });
+    </script>
+
+    <script id="traffic-chart-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const trafficChart = echarts.init(document.getElementById('traffic-chart'));
+            
+            const option = {
+                grid: {
+                    top: 5,
+                    right: 5,
+                    bottom: 5,
+                    left: 5,
+                    containLabel: false
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    show: false,
+                    data: Array.from({length: 60}, (_, i) => i)
+                },
+                yAxis: {
+                    type: 'value',
+                    show: false
+                },
+                series: [
+                    {
+                        name: 'Inbound',
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        lineStyle: {
+                            width: 2,
+                            color: '#00F0FF'
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [
+                                    {offset: 0, color: 'rgba(0, 240, 255, 0.3)'},
+                                    {offset: 1, color: 'rgba(0, 240, 255, 0)'}
+                                ]
+                            }
+                        },
+                        data: Array.from({length: 60}, () => Math.random() * 50 + 50)
+                    },
+                    {
+                        name: 'Outbound',
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        lineStyle: {
+                            width: 2,
+                            color: '#FF0033'
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [
+                                    {offset: 0, color: 'rgba(255, 0, 51, 0.3)'},
+                                    {offset: 1, color: 'rgba(255, 0, 51, 0)'}
+                                ]
+                            }
+                        },
+                        data: Array.from({length: 60}, () => Math.random() * 30 + 20)
+                    }
+                ]
+            };
+            
+            trafficChart.setOption(option);
+            
+            // Update chart data every 2 seconds
+            setInterval(() => {
+                const inboundData = option.series[0].data;
+                const outboundData = option.series[1].data;
+                
+                inboundData.shift();
+                inboundData.push(Math.random() * 50 + 50);
+                
+                outboundData.shift();
+                outboundData.push(Math.random() * 30 + 20);
+                
+                trafficChart.setOption({
+                    series: [
+                        {data: inboundData},
+                        {data: outboundData}
+                    ]
+                });
+            }, 2000);
+            
+            // Resize chart when window resizes
+            window.addEventListener('resize', function() {
+                trafficChart.resize();
+            });
+        });
+    </script>
+</body>
+</html>
