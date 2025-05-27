@@ -32,7 +32,7 @@ def index():
 @require_token
 def dump_data():
     data = request.get_json(force=True)
-    timestamp = datetime.utcnow().strftime('%Y-%m-%d, %H-%M-%S')
+    timestamp = datetime.utcnow().strftime('%Y-%m-%d|%H-%M-%S')
     filename = f'dump-{timestamp}.json'
     filepath = os.path.join(DUMP_DIR, filename)
     with open(filepath, 'w') as f:
