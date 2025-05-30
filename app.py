@@ -12,6 +12,9 @@ from flask_socketio import SocketIO, emit
 import eventlet
 eventlet.monkey_patch()
 
+app = Flask(__name__)
+DUMP_DIR  = 'dumps'
+os.makedirs(DUMP_DIR, exist_ok=True)
 socketio = SocketIO(app, cors_allowed_origins="*")
 active_sockets = {}
 
@@ -68,9 +71,7 @@ def decrypt_aes(encrypted_data_b64):
         print(f"[DECRYPTION ERROR] {e}")
         return None
     
-app = Flask(__name__)
-DUMP_DIR  = 'dumps'
-os.makedirs(DUMP_DIR, exist_ok=True)
+
 
 def require_token(f):
     @wraps(f)
