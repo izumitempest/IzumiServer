@@ -3,3 +3,4 @@ gunicorn
 PyJWT
 pycryptodome
 flask_socketio
+eventlet
