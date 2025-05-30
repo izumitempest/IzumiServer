@@ -234,34 +234,54 @@ grid-template-columns: 0.8fr 0.5fr 1fr 1fr 1fr;
 </div>
 </div>
 </main>
-<!-- Tab Bar - Hide on larger screens -->
-<div class="md:hidden fixed bottom-0 w-full bg-[#0A0A0A] border-t border-[#1A1A1A] px-2 py-2">
+<!-- Navigation Bar - Desktop -->
+<div class="hidden md:flex fixed top-16 left-0 w-full bg-[#0A0A0A] border-b border-[#1A1A1A] px-4 md:px-6 lg:px-8 py-2 z-40">
+<div class="max-w-7xl mx-auto w-full flex space-x-8">
+<button class="nav-btn text-primary border-b-2 border-primary" data-page="dashboard">
+<i class="ri-dashboard-line mr-2"></i>Dashboard
+</button>
+<button class="nav-btn text-[#888] hover:text-primary" data-page="agents">
+<i class="ri-user-line mr-2"></i>Agents
+</button>
+<button class="nav-btn text-[#888] hover:text-primary" data-page="command">
+<i class="ri-terminal-box-line mr-2"></i>Command
+</button>
+<button class="nav-btn text-[#888] hover:text-primary" data-page="data">
+<i class="ri-database-2-line mr-2"></i>Data
+</button>
+<button class="nav-btn text-[#888] hover:text-primary" data-page="security">
+<i class="ri-shield-line mr-2"></i>Security
+</button>
+</div>
+</div>
+<!-- Tab Bar - Mobile -->
+<div class="md:hidden fixed bottom-0 w-full bg-[#0A0A0A] border-t border-[#1A1A1A] px-2 py-2 z-50">
 <div class="grid grid-cols-5 gap-1">
-<div class="flex flex-col items-center justify-center cursor-pointer">
+<div class="tab-btn flex flex-col items-center justify-center cursor-pointer" data-page="dashboard">
 <div class="w-6 h-6 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-1">
 <i class="ri-dashboard-line text-primary"></i>
 </div>
 <span class="text-[10px] text-primary">Dashboard</span>
 </div>
-<div class="flex flex-col items-center justify-center cursor-pointer">
+<div class="tab-btn flex flex-col items-center justify-center cursor-pointer" data-page="agents">
 <div class="w-6 h-6 flex items-center justify-center rounded-full mb-1">
 <i class="ri-user-line text-[#888]"></i>
 </div>
 <span class="text-[10px] text-[#888]">Agents</span>
 </div>
-<div class="flex flex-col items-center justify-center cursor-pointer">
+<div class="tab-btn flex flex-col items-center justify-center cursor-pointer" data-page="command">
 <div class="w-10 h-10 flex items-center justify-center bg-primary rounded-full -mt-5 mb-1 shadow-lg">
 <i class="ri-terminal-box-fill text-[#0A0A0A] text-xl"></i>
 </div>
 <span class="text-[10px] text-[#888]">Command</span>
 </div>
-<div class="flex flex-col items-center justify-center cursor-pointer">
+<div class="tab-btn flex flex-col items-center justify-center cursor-pointer" data-page="data">
 <div class="w-6 h-6 flex items-center justify-center rounded-full mb-1">
 <i class="ri-database-2-line text-[#888]"></i>
 </div>
 <span class="text-[10px] text-[#888]">Data</span>
 </div>
-<div class="flex flex-col items-center justify-center cursor-pointer">
+<div class="tab-btn flex flex-col items-center justify-center cursor-pointer" data-page="security">
 <div class="w-6 h-6 flex items-center justify-center rounded-full mb-1">
 <i class="ri-shield-line text-[#888]"></i>
 </div>
@@ -269,7 +289,639 @@ grid-template-columns: 0.8fr 0.5fr 1fr 1fr 1fr;
 </div>
 </div>
 </div>
-<!-- Quick Action Button - Adjust position for desktop -->
+<!-- Page Content Container -->
+<div id="page-container" class="pt-16 md:pt-28 pb-16 px-4 md:px-6 lg:px-8">
+<!-- Dashboard Page -->
+<div id="dashboard-page" class="page-content">
+<!-- Current dashboard content goes here -->
+</div>
+<!-- Agents Page -->
+<div id="agents-page" class="page-content hidden">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Agent Stats -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<h3 class="text-sm font-medium mb-3">Agent Statistics</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">TOTAL AGENTS</div>
+<div class="text-xl font-medium text-primary">24</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">ACTIVE NOW</div>
+<div class="text-xl font-medium text-primary">12</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">IDLE</div>
+<div class="text-xl font-medium text-secondary">8</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">OFFLINE</div>
+<div class="text-xl font-medium text-[#888]">4</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<h3 class="text-sm font-medium mb-3">Quick Actions</h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-primary bg-opacity-10 text-primary text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-add-line mr-2"></i>Add New Agent
+</button>
+<button class="bg-[#0A0A0A] text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-refresh-line mr-2"></i>Refresh All
+</button>
+<button class="bg-[#0A0A0A] text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-shut-down-line mr-2"></i>Force Update
+</button>
+<button class="bg-secondary bg-opacity-10 text-secondary text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-delete-bin-line mr-2"></i>Remove All
+</button>
+</div>
+</div>
+<!-- System Distribution -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<h3 class="text-sm font-medium mb-3">System Distribution</h3>
+<div id="system-chart" class="h-[200px]"></div>
+</div>
+</div>
+<!-- Detailed Agent List -->
+<div class="bg-[#1A1A1A] rounded mt-4 p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-medium">Agent Details</h3>
+<div class="flex items-center space-x-2">
+<button class="text-xs bg-[#0A0A0A] px-3 py-1 rounded">
+<i class="ri-filter-line mr-1"></i>Filter
+</button>
+<button class="text-xs bg-[#0A0A0A] px-3 py-1 rounded">
+<i class="ri-search-line mr-1"></i>Search
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-xs">
+<thead>
+<tr class="text-[#888] border-b border-[#2A2A2A]">
+<th class="text-left pb-2">AGENT ID</th>
+<th class="text-left pb-2">STATUS</th>
+<th class="text-left pb-2">IP ADDRESS</th>
+<th class="text-left pb-2">LOCATION</th>
+<th class="text-left pb-2">SYSTEM</th>
+<th class="text-left pb-2">LAST ACTIVE</th>
+<th class="text-left pb-2">ACTIONS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-[#2A2A2A]">
+<td class="py-3 text-primary">AGT_45X12</td>
+<td>
+<div class="flex items-center">
+<div class="w-2 h-2 rounded-full bg-primary mr-1"></div>
+<span>Active</span>
+</div>
+</td>
+<td>192.168.1.45</td>
+<td>Tokyo, JP</td>
+<td>Linux 5.15.0</td>
+<td>2 min ago</td>
+<td>
+<div class="flex space-x-2">
+<button class="text-primary"><i class="ri-terminal-line"></i></button>
+<button class="text-[#888]"><i class="ri-settings-line"></i></button>
+<button class="text-secondary"><i class="ri-delete-bin-line"></i></button>
+</div>
+</td>
+</tr>
+<!-- Add more rows as needed -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Command Page -->
+<div id="command-page" class="page-content hidden">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+<!-- Main Terminal -->
+<div class="lg:col-span-2">
+<div class="bg-[#1A1A1A] rounded p-4">
+<div class="flex justify-between items-center mb-3">
+<h3 class="text-sm font-medium">Command Terminal</h3>
+<div class="flex space-x-1">
+<div class="w-2 h-2 rounded-full bg-[#FF0033]"></div>
+<div class="w-2 h-2 rounded-full bg-[#FFCC00]"></div>
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="terminal bg-[#0A0A0A] text-[#E0E0E0] p-4 rounded h-[400px] text-sm overflow-y-auto scrollbar mb-3" id="command-output">
+<div class="text-[#888]">root@nexus:~# <span class="text-primary">help</span></div>
+<div class="text-xs mt-1 mb-3">
+Available commands:
+<br>- list_agents: Display all connected agents
+<br>- check_status [agent_id]: Check specific agent status
+<br>- execute [agent_id] [command]: Run command on agent
+<br>- kill [agent_id]: Terminate agent connection
+<br>- broadcast [command]: Execute on all active agents
+</div>
+<div class="text-[#888]">root@nexus:~# <span class="text-primary">list_agents</span></div>
+<div class="text-xs mt-1 mb-3" id="agent-list">
+Scanning network...
+[+] AGT_45X12 - Active - Tokyo, JP
+[+] AGT_78B33 - Active - Berlin, DE
+[+] AGT_32F09 - Active - New York, US
+[-] AGT_91C45 - Idle - London, UK
+[+] AGT_67D21 - Active - Sydney, AU
+</div>
+<div class="text-[#888]">root@nexus:~# <span id="command-input"></span><span id="cursor">_</span></div>
+</div>
+<div class="flex">
+<input type="text" id="terminal-input" class="terminal bg-[#0A0A0A] text-xs text-[#E0E0E0] border-none outline-none flex-1 p-2 rounded-l !rounded-button" placeholder="Enter command...">
+<button id="execute-btn" class="bg-primary text-[#0A0A0A] text-xs font-medium px-4 !rounded-button flex items-center">
+<i class="ri-terminal-line mr-2"></i>EXECUTE
+</button>
+</div>
+</div>
+<!-- Batch Commands -->
+<div class="bg-[#1A1A1A] rounded p-4 mt-4">
+<div class="flex justify-between items-center mb-3">
+<h3 class="text-sm font-medium">Batch Commands</h3>
+<button class="text-xs bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full">
+<i class="ri-add-line mr-1"></i>New Batch
+</button>
+</div>
+<div class="space-y-2">
+<div class="bg-[#0A0A0A] rounded p-3 cursor-pointer hover:bg-opacity-60">
+<div class="flex justify-between items-center">
+<div class="text-xs font-medium">System Info Collection</div>
+<div class="text-[10px] text-[#888]">5 commands</div>
+</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3 cursor-pointer hover:bg-opacity-60">
+<div class="flex justify-between items-center">
+<div class="text-xs font-medium">Network Diagnostics</div>
+<div class="text-[10px] text-[#888]">3 commands</div>
+</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3 cursor-pointer hover:bg-opacity-60">
+<div class="flex justify-between items-center">
+<div class="text-xs font-medium">Security Check</div>
+<div class="text-[10px] text-[#888]">7 commands</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar -->
+<div class="bg-[#1A1A1A] rounded p-4 h-full">
+<!-- System Monitoring -->
+<div class="mb-6">
+<h3 class="text-sm font-medium mb-3">System Monitoring</h3>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">CPU Usage</span>
+<span class="text-primary">45%</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-[45%] bg-primary rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">Memory</span>
+<span class="text-primary">72%</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-[72%] bg-primary rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">Network</span>
+<span class="text-primary">28%</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-[28%] bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Command History -->
+<div class="mb-6">
+<h3 class="text-sm font-medium mb-3">Command History</h3>
+<div class="space-y-2">
+<div class="bg-[#0A0A0A] rounded p-2 text-xs">
+<div class="text-[#888] mb-1">23:45:12</div>
+<div class="text-primary">list_agents</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-2 text-xs">
+<div class="text-[#888] mb-1">23:44:56</div>
+<div class="text-primary">check_status AGT_45X12</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-2 text-xs">
+<div class="text-[#888] mb-1">23:44:30</div>
+<div class="text-primary">execute AGT_78B33 get_sysinfo</div>
+</div>
+</div>
+</div>
+<!-- Quick Commands -->
+<div>
+<h3 class="text-sm font-medium mb-3">Quick Commands</h3>
+<div class="grid grid-cols-2 gap-2">
+<button class="bg-[#0A0A0A] text-xs p-2 rounded text-center hover:bg-opacity-60">
+System Info
+</button>
+<button class="bg-[#0A0A0A] text-xs p-2 rounded text-center hover:bg-opacity-60">
+Network Scan
+</button>
+<button class="bg-[#0A0A0A] text-xs p-2 rounded text-center hover:bg-opacity-60">
+Process List
+</button>
+<button class="bg-[#0A0A0A] text-xs p-2 rounded text-center hover:bg-opacity-60">
+Security Check
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Data Page -->
+<div id="data-page" class="page-content hidden">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Data Overview -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<h3 class="text-sm font-medium mb-3">Data Overview</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">TOTAL DATA</div>
+<div class="text-xl font-medium text-primary">2.4 TB</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">ACTIVE STREAMS</div>
+<div class="text-xl font-medium text-primary">18</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">TRANSFER RATE</div>
+<div class="text-xl font-medium text-primary">85 MB/s</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">COMPRESSION</div>
+<div class="text-xl font-medium text-primary">64%</div>
+</div>
+</div>
+</div>
+<!-- Data Distribution -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<div class="flex justify-between items-center mb-3">
+<h3 class="text-sm font-medium">Data Distribution</h3>
+<div class="flex items-center space-x-2">
+<span class="text-[10px] text-[#888]">Last 24h</span>
+<i class="ri-refresh-line text-primary cursor-pointer"></i>
+</div>
+</div>
+<div id="data-distribution-chart" class="h-[180px]"></div>
+</div>
+<!-- Quick Actions -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<h3 class="text-sm font-medium mb-3">Quick Actions</h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-primary bg-opacity-10 text-primary text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-upload-cloud-line mr-2"></i>Upload Data
+</button>
+<button class="bg-[#0A0A0A] text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-download-cloud-line mr-2"></i>Download
+</button>
+<button class="bg-[#0A0A0A] text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-file-zip-line mr-2"></i>Compress
+</button>
+<button class="bg-secondary bg-opacity-10 text-secondary text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-delete-bin-line mr-2"></i>Clear Cache
+</button>
+</div>
+</div>
+</div>
+<!-- Data Transfer History -->
+<div class="bg-[#1A1A1A] rounded mt-4 p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-medium">Transfer History</h3>
+<div class="flex items-center space-x-2">
+<button class="text-xs bg-[#0A0A0A] px-3 py-1 rounded">
+<i class="ri-filter-line mr-1"></i>Filter
+</button>
+<button class="text-xs bg-[#0A0A0A] px-3 py-1 rounded">
+<i class="ri-file-download-line mr-1"></i>Export
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-xs">
+<thead>
+<tr class="text-[#888] border-b border-[#2A2A2A]">
+<th class="text-left pb-2">FILE NAME</th>
+<th class="text-left pb-2">TYPE</th>
+<th class="text-left pb-2">SIZE</th>
+<th class="text-left pb-2">SOURCE</th>
+<th class="text-left pb-2">DESTINATION</th>
+<th class="text-left pb-2">STATUS</th>
+<th class="text-left pb-2">TIME</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-[#2A2A2A]">
+<td class="py-3">system_logs.zip</td>
+<td>Archive</td>
+<td>458 MB</td>
+<td>AGT_45X12</td>
+<td>Main Server</td>
+<td class="text-primary">Completed</td>
+<td>2 min ago</td>
+</tr>
+<tr class="border-b border-[#2A2A2A]">
+<td class="py-3">network_dump.pcap</td>
+<td>Capture</td>
+<td>1.2 GB</td>
+<td>AGT_78B33</td>
+<td>Analysis Node</td>
+<td class="text-primary">Completed</td>
+<td>15 min ago</td>
+</tr>
+<tr class="border-b border-[#2A2A2A]">
+<td class="py-3">memory_snapshot.bin</td>
+<td>Binary</td>
+<td>2.8 GB</td>
+<td>AGT_32F09</td>
+<td>Backup Server</td>
+<td class="text-secondary">Failed</td>
+<td>23 min ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Data Storage Analysis -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+<!-- Storage Usage -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-medium">Storage Usage</h3>
+<span class="text-xs text-primary">75% Used</span>
+</div>
+<div id="storage-usage-chart" class="h-[200px]"></div>
+</div>
+<!-- Data Types -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-medium">Data Types</h3>
+<button class="text-xs bg-[#0A0A0A] px-3 py-1 rounded">
+<i class="ri-pie-chart-line mr-1"></i>View All
+</button>
+</div>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">System Logs</span>
+<span class="text-primary">45%</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-[45%] bg-primary rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">Network Captures</span>
+<span class="text-primary">28%</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-[28%] bg-primary rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">Memory Dumps</span>
+<span class="text-primary">17%</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-[17%] bg-primary rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">Other</span>
+<span class="text-primary">10%</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-[10%] bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Security Page -->
+<div id="security-page" class="page-content hidden">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Security Status -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<h3 class="text-sm font-medium mb-3">Security Status</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">THREAT LEVEL</div>
+<div class="text-xl font-medium text-primary">Low</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">ACTIVE THREATS</div>
+<div class="text-xl font-medium text-primary">0</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">BLOCKED</div>
+<div class="text-xl font-medium text-primary">124</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3">
+<div class="text-[10px] text-[#888] mb-1">SCANNED</div>
+<div class="text-xl font-medium text-primary">2.8K</div>
+</div>
+</div>
+</div>
+<!-- Security Metrics -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<div class="flex justify-between items-center mb-3">
+<h3 class="text-sm font-medium">Security Metrics</h3>
+<div class="flex items-center space-x-2">
+<span class="text-[10px] text-[#888]">Last 24h</span>
+<i class="ri-refresh-line text-primary cursor-pointer"></i>
+</div>
+</div>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">Firewall Status</span>
+<span class="text-primary">Active</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-full bg-primary rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">Encryption</span>
+<span class="text-primary">256-bit</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-full bg-primary rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">System Integrity</span>
+<span class="text-primary">98%</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-[98%] bg-primary rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-[#888]">Updates</span>
+<span class="text-primary">Current</span>
+</div>
+<div class="h-1.5 bg-[#0A0A0A] rounded-full">
+<div class="h-full w-full bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<h3 class="text-sm font-medium mb-3">Quick Actions</h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-primary bg-opacity-10 text-primary text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-shield-check-line mr-2"></i>System Scan
+</button>
+<button class="bg-[#0A0A0A] text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-lock-line mr-2"></i>Lockdown
+</button>
+<button class="bg-[#0A0A0A] text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-refresh-line mr-2"></i>Update
+</button>
+<button class="bg-secondary bg-opacity-10 text-secondary text-xs p-3 rounded flex items-center justify-center">
+<i class="ri-alarm-warning-line mr-2"></i>Threats
+</button>
+</div>
+</div>
+</div>
+<!-- Security Logs -->
+<div class="bg-[#1A1A1A] rounded mt-4 p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-medium">Security Logs</h3>
+<div class="flex items-center space-x-2">
+<button class="text-xs bg-[#0A0A0A] px-3 py-1 rounded">
+<i class="ri-filter-line mr-1"></i>Filter
+</button>
+<button class="text-xs bg-[#0A0A0A] px-3 py-1 rounded">
+<i class="ri-file-download-line mr-1"></i>Export
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-xs">
+<thead>
+<tr class="text-[#888] border-b border-[#2A2A2A]">
+<th class="text-left pb-2">TIMESTAMP</th>
+<th class="text-left pb-2">EVENT</th>
+<th class="text-left pb-2">SOURCE</th>
+<th class="text-left pb-2">SEVERITY</th>
+<th class="text-left pb-2">ACTION</th>
+<th class="text-left pb-2">STATUS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-[#2A2A2A]">
+<td class="py-3">2025-05-28 09:45</td>
+<td>Authentication Attempt</td>
+<td>192.168.1.105</td>
+<td class="text-primary">Low</td>
+<td>Blocked</td>
+<td class="text-primary">Resolved</td>
+</tr>
+<tr class="border-b border-[#2A2A2A]">
+<td class="py-3">2025-05-28 09:30</td>
+<td>Firewall Update</td>
+<td>System</td>
+<td class="text-primary">Info</td>
+<td>Applied</td>
+<td class="text-primary">Completed</td>
+</tr>
+<tr class="border-b border-[#2A2A2A]">
+<td class="py-3">2025-05-28 09:15</td>
+<td>Port Scan Detected</td>
+<td>External</td>
+<td class="text-secondary">High</td>
+<td>Blocked</td>
+<td class="text-primary">Resolved</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Security Analytics -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+<!-- Threat Distribution -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-medium">Threat Distribution</h3>
+<span class="text-xs text-primary">Last 7 Days</span>
+</div>
+<div id="threat-distribution-chart" class="h-[200px]"></div>
+</div>
+<!-- Authentication -->
+<div class="bg-[#1A1A1A] rounded p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-medium">Authentication</h3>
+<button class="text-xs bg-[#0A0A0A] px-3 py-1 rounded">
+<i class="ri-shield-keyhole-line mr-1"></i>Manage
+</button>
+</div>
+<div class="space-y-3">
+<div class="bg-[#0A0A0A] rounded p-3 flex items-center justify-between">
+<div class="flex items-center">
+<i class="ri-fingerprint-line text-primary mr-2"></i>
+<div>
+<div class="text-xs">Two-Factor Auth</div>
+<div class="text-[10px] text-[#888]">SMS and Authenticator</div>
+</div>
+</div>
+<div class="w-8 h-4 bg-primary rounded-full relative cursor-pointer">
+<div class="w-3 h-3 bg-[#0A0A0A] rounded-full absolute top-0.5 right-0.5"></div>
+</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3 flex items-center justify-between">
+<div class="flex items-center">
+<i class="ri-shield-star-line text-primary mr-2"></i>
+<div>
+<div class="text-xs">Hardware Keys</div>
+<div class="text-[10px] text-[#888]">USB Security Keys</div>
+</div>
+</div>
+<div class="w-8 h-4 bg-primary rounded-full relative cursor-pointer">
+<div class="w-3 h-3 bg-[#0A0A0A] rounded-full absolute top-0.5 right-0.5"></div>
+</div>
+</div>
+<div class="bg-[#0A0A0A] rounded p-3 flex items-center justify-between">
+<div class="flex items-center">
+<i class="ri-lock-password-line text-primary mr-2"></i>
+<div>
+<div class="text-xs">Password Policy</div>
+<div class="text-[10px] text-[#888]">Strong Requirements</div>
+</div>
+</div>
+<div class="w-8 h-4 bg-primary rounded-full relative cursor-pointer">
+<div class="w-3 h-3 bg-[#0A0A0A] rounded-full absolute top-0.5 right-0.5"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Action Button -->
 <div class="fixed bottom-20 md:bottom-8 right-4 md:right-8 z-50">
 <div class="w-12 h-12 flex items-center justify-center bg-secondary rounded-full shadow-lg cursor-pointer">
 <i class="ri-alarm-warning-fill text-white text-xl"></i>
@@ -302,16 +954,338 @@ uptimeElement.textContent = `${formattedHours}:${formattedMinutes}:${formattedSe
 }, 1000);
 });
 </script>
-<script id="command-cursor-script">
+<script id="command-terminal-script">
 document.addEventListener('DOMContentLoaded', function() {
-const cursor = document.getElementById('command-cursor');
+const cursor = document.getElementById('cursor');
+const commandInput = document.getElementById('command-input');
+const terminalInput = document.getElementById('terminal-input');
+const commandOutput = document.getElementById('command-output');
+const executeBtn = document.getElementById('execute-btn');
+// Cursor blink effect
 setInterval(() => {
 cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
 }, 500);
+// Handle command input
+terminalInput.addEventListener('input', function() {
+commandInput.textContent = this.value;
+});
+// Handle command execution
+function executeCommand(command) {
+if (!command) return;
+const timestamp = new Date().toLocaleTimeString();
+const newCommand = document.createElement('div');
+newCommand.className = 'text-[#888]';
+newCommand.innerHTML = `root@nexus:~# <span class="text-primary">${command}</span>`;
+const response = document.createElement('div');
+response.className = 'text-xs mt-1 mb-3';
+// Simple command handling
+switch(command.toLowerCase()) {
+case 'help':
+response.innerHTML = `Available commands:<br>
+- list_agents: Display all connected agents<br>
+- check_status [agent_id]: Check specific agent status<br>
+- execute [agent_id] [command]: Run command on agent<br>
+- kill [agent_id]: Terminate agent connection<br>
+- broadcast [command]: Execute on all active agents`;
+break;
+case 'list_agents':
+response.innerHTML = document.getElementById('agent-list').innerHTML;
+break;
+default:
+if (command.startsWith('check_status')) {
+response.textContent = 'Checking agent status...';
+} else if (command.startsWith('execute')) {
+response.textContent = 'Executing command on agent...';
+} else if (command.startsWith('kill')) {
+response.textContent = 'Terminating agent connection...';
+} else if (command.startsWith('broadcast')) {
+response.textContent = 'Broadcasting command to all active agents...';
+} else {
+response.textContent = `Command not recognized: ${command}`;
+}
+}
+commandOutput.appendChild(newCommand);
+commandOutput.appendChild(response);
+commandOutput.scrollTop = commandOutput.scrollHeight;
+// Clear input
+terminalInput.value = '';
+commandInput.textContent = '';
+// Add to command history
+const historyEntry = document.createElement('div');
+historyEntry.className = 'bg-[#0A0A0A] rounded p-2 text-xs mb-2';
+historyEntry.innerHTML = `
+<div class="text-[#888] mb-1">${timestamp}</div>
+<div class="text-primary">${command}</div>
+`;
+const historyContainer = document.querySelector('.command-history');
+if (historyContainer) {
+historyContainer.insertBefore(historyEntry, historyContainer.firstChild);
+}
+}
+// Execute command on button click or Enter key
+executeBtn.addEventListener('click', () => executeCommand(terminalInput.value));
+terminalInput.addEventListener('keypress', (e) => {
+if (e.key === 'Enter') {
+executeCommand(terminalInput.value);
+}
+});
+// Initialize with focus on input
+terminalInput.focus();
+});
+</script>
+<script id="navigation-script">
+document.addEventListener('DOMContentLoaded', function() {
+// Get all navigation elements
+const navButtons = document.querySelectorAll('.nav-btn, .tab-btn');
+const pages = document.querySelectorAll('.page-content');
+// Function to show selected page and update navigation
+function showPage(pageId) {
+// Hide all pages
+pages.forEach(page => page.classList.add('hidden'));
+// Show selected page
+const selectedPage = document.getElementById(`${pageId}-page`);
+if (selectedPage) selectedPage.classList.remove('hidden');
+// Update navigation styles
+navButtons.forEach(btn => {
+const isSelected = btn.dataset.page === pageId;
+// Update desktop nav
+if (btn.classList.contains('nav-btn')) {
+btn.classList.toggle('text-primary', isSelected);
+btn.classList.toggle('border-b-2', isSelected);
+btn.classList.toggle('border-primary', isSelected);
+btn.classList.toggle('text-[#888]', !isSelected);
+}
+// Update mobile nav
+else {
+const icon = btn.querySelector('i');
+const text = btn.querySelector('span');
+const iconContainer = btn.querySelector('div');
+if (isSelected) {
+icon.classList.add('text-primary');
+text.classList.add('text-primary');
+iconContainer.classList.add('bg-primary', 'bg-opacity-10');
+} else {
+icon.classList.remove('text-primary');
+text.classList.remove('text-primary');
+iconContainer.classList.remove('bg-primary', 'bg-opacity-10');
+}
+}
+});
+}
+// Add click event listeners to all navigation buttons
+navButtons.forEach(btn => {
+btn.addEventListener('click', () => showPage(btn.dataset.page));
+});
+// Initialize system distribution chart
+const systemChart = echarts.init(document.getElementById('system-chart'));
+const systemOption = {
+color: ['#00F0FF', '#FF0033', '#FFCC00'],
+tooltip: {
+trigger: 'item'
+},
+legend: {
+bottom: '0',
+left: 'center',
+textStyle: {
+color: '#888'
+}
+},
+series: [
+{
+name: 'System',
+type: 'pie',
+radius: ['40%', '70%'],
+avoidLabelOverlap: false,
+itemStyle: {
+borderRadius: 10,
+borderColor: '#0A0A0A',
+borderWidth: 2
+},
+label: {
+show: false
+},
+emphasis: {
+label: {
+show: true,
+formatter: '{b}: {c}'
+}
+},
+labelLine: {
+show: false
+},
+data: [
+{ value: 12, name: 'Linux' },
+{ value: 8, name: 'Windows' },
+{ value: 4, name: 'macOS' }
+]
+}
+]
+};
+systemChart.setOption(systemOption);
+// Handle window resize
+window.addEventListener('resize', () => {
+systemChart.resize();
+});
 });
 </script>
 <script id="traffic-chart-script">
 document.addEventListener('DOMContentLoaded', function() {
+const dataDistributionChart = echarts.init(document.getElementById('data-distribution-chart'));
+const threatDistributionChart = echarts.init(document.getElementById('threat-distribution-chart'));
+
+// Threat Distribution Chart
+const threatDistributionOption = {
+    color: ['#00F0FF', '#FF0033', '#FFCC00'],
+    grid: {
+        top: 10,
+        right: 10,
+        bottom: 30,
+        left: 30
+    },
+    xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        axisLine: {
+            lineStyle: { color: '#2A2A2A' }
+        },
+        axisLabel: { color: '#888', fontSize: 10 }
+    },
+    yAxis: {
+        type: 'value',
+        axisLine: {
+            lineStyle: { color: '#2A2A2A' }
+        },
+        axisLabel: { color: '#888', fontSize: 10 },
+        splitLine: {
+            lineStyle: { color: '#1A1A1A' }
+        }
+    },
+    tooltip: {
+        trigger: 'axis',
+        backgroundColor: '#1A1A1A',
+        borderColor: '#2A2A2A',
+        textStyle: { color: '#E0E0E0' }
+    },
+    legend: {
+        data: ['Low', 'Medium', 'High'],
+        bottom: 0,
+        textStyle: { color: '#888' }
+    },
+    series: [
+        {
+            name: 'Low',
+            type: 'bar',
+            stack: 'total',
+            data: [12, 8, 15, 9, 7, 11, 13]
+        },
+        {
+            name: 'Medium',
+            type: 'bar',
+            stack: 'total',
+            data: [5, 7, 3, 4, 6, 2, 5]
+        },
+        {
+            name: 'High',
+            type: 'bar',
+            stack: 'total',
+            data: [2, 1, 0, 1, 2, 0, 1]
+        }
+    ]
+};
+const storageUsageChart = echarts.init(document.getElementById('storage-usage-chart'));
+// Data Distribution Chart
+const dataDistributionOption = {
+color: ['#00F0FF'],
+grid: {
+top: 10,
+right: 10,
+bottom: 20,
+left: 30
+},
+xAxis: {
+type: 'category',
+data: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+axisLine: {
+lineStyle: { color: '#2A2A2A' }
+},
+axisLabel: { color: '#888', fontSize: 10 }
+},
+yAxis: {
+type: 'value',
+axisLine: {
+lineStyle: { color: '#2A2A2A' }
+},
+axisLabel: { color: '#888', fontSize: 10 },
+splitLine: {
+lineStyle: { color: '#1A1A1A' }
+}
+},
+tooltip: {
+trigger: 'axis',
+backgroundColor: '#1A1A1A',
+borderColor: '#2A2A2A',
+textStyle: { color: '#E0E0E0' }
+},
+series: [{
+data: [820, 932, 901, 934, 1290, 1330],
+type: 'line',
+smooth: true,
+symbol: 'none',
+areaStyle: {
+color: {
+type: 'linear',
+x: 0, y: 0, x2: 0, y2: 1,
+colorStops: [{
+offset: 0, color: 'rgba(0, 240, 255, 0.3)'
+}, {
+offset: 1, color: 'rgba(0, 240, 255, 0)'
+}]
+}
+}
+}]
+};
+// Storage Usage Chart
+const storageUsageOption = {
+color: ['#00F0FF', '#FF0033', '#FFCC00', '#888888'],
+tooltip: {
+trigger: 'item',
+backgroundColor: '#1A1A1A',
+borderColor: '#2A2A2A',
+textStyle: { color: '#E0E0E0' }
+},
+legend: {
+bottom: 0,
+left: 'center',
+textStyle: { color: '#888' },
+itemWidth: 12,
+itemHeight: 12
+},
+series: [{
+type: 'pie',
+radius: ['40%', '70%'],
+avoidLabelOverlap: false,
+itemStyle: {
+borderRadius: 10,
+borderColor: '#0A0A0A',
+borderWidth: 2
+},
+label: { show: false },
+labelLine: { show: false },
+data: [
+{ value: 45, name: 'System Logs' },
+{ value: 28, name: 'Network Captures' },
+{ value: 17, name: 'Memory Dumps' },
+{ value: 10, name: 'Other' }
+]
+}]
+};
+dataDistributionChart.setOption(dataDistributionOption);
+storageUsageChart.setOption(storageUsageOption);
+window.addEventListener('resize', function() {
+dataDistributionChart.resize();
+storageUsageChart.resize();
+});
+// Move existing traffic chart code here
 const trafficChart = echarts.init(document.getElementById('traffic-chart'));
 const option = {
 grid: {
